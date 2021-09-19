@@ -2,7 +2,12 @@ package domain
 
 class Game {
 
-	fun play() {
+	private val scoreboard: Scoreboard = Scoreboard()
 
+	fun roll(pins: Int) {
+		if (scoreboard.isGameOver()) return
+		scoreboard.roll(pins)
 	}
+
+
 }

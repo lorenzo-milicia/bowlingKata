@@ -1,5 +1,6 @@
-import domain.Frame
 import domain.LastFrame
+import domain.ScoreComputer
+import domain.Scoreboard
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -35,27 +36,40 @@ class ScoreboardTest {
 		scoreboard.roll(10)
 		scoreboard.roll(10)
 		scoreboard.roll(10)
-		scoreboard.roll(10)
+		scoreboard.roll(3)
+		scoreboard.roll(3)
 		scoreboard.roll(10)
 		scoreboard.roll(10)
 		scoreboard.roll(10)
 		scoreboard.roll(10)
 		scoreboard.roll(5)
+		scoreboard.roll(5)
+		scoreboard.roll(5)
+
 
 		assertEquals(10, scoreboard.frames.size)
 		assertTrue(scoreboard.frames.last() is LastFrame)
+		assertTrue(scoreboard.isGameOver())
+	}
+
+	@Test
+	internal fun `frames scores test`() {
+		val scoreboard = Scoreboard()
+
+		scoreboard.roll(9)
+		scoreboard.roll(1)
+		scoreboard.roll(3)
+		scoreboard.roll(2)
+		scoreboard.roll(9)
+		scoreboard.roll(0)
+		scoreboard.roll(3)
+		scoreboard.roll(3)
+		scoreboard.roll(4)
+		scoreboard.roll(0)
+		scoreboard.roll(10)
+
+		val scores = listOf(13, 5, 9, 6, 4, null)
+		assertEquals(scores, scoreboard.frameScores())
 	}
 }
 
-class Scoreboard {
-
-	val frames = mutableListOf<Frame>(Frame())
-
-	fun roll(pinsKnockedDown: Int) {
-		if (!frames.last().isClosed) frames.last().roll(pinsKnockedDown)
-		else {
-			if (frames.size < 9) frames.add(Frame().also { it.roll(pinsKnockedDown) })
-			else frames.add(LastFrame().also {it.roll(pinsKnockedDown)})
-		}
-	}
-}

@@ -5,7 +5,5 @@ class GameTest {
 
 	@Test
 	internal fun name() {
-		val game = Game()
-		game.play()
 	}
 }
