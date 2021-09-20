@@ -14,7 +14,11 @@ class Scoreboard {
 
 	fun isGameOver() = frames.last() is LastFrame && frames.last().isClosed
 
-	fun frameScores(): List<Int?> {
+	fun frameScores(): List<FrameScore> {
 		return ScoreComputer.computeFramesScore(frames)
+	}
+
+	fun totalScore(): Int {
+		return ScoreComputer.computeTotalScore(frames)
 	}
 }

@@ -1,6 +1,8 @@
 package domain
 
-class Game {
+class Game(
+	private val display: IDisplay
+) {
 
 	private val scoreboard: Scoreboard = Scoreboard()
 
@@ -9,5 +11,16 @@ class Game {
 		scoreboard.roll(pins)
 	}
 
+	fun roll(listRolls: List<Int>) {
+		listRolls.forEach { roll(it) }
+	}
+
+	fun displayFramesScore() {
+		display.displayFramesScore(scoreboard.frameScores())
+	}
+
+	fun displayTotalScore() {
+		display.displayTotalScore(scoreboard.totalScore())
+	}
 
 }

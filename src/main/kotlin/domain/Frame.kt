@@ -36,7 +36,7 @@ open class Frame {
 
 	open val selfScore: Int
 		get() {
-			return if (!isClosed) 0
+			return if (!isClosed) (firstRoll?.pinsKnockedDown?: 0)
 			else if (firstRoll is Strike) 10
 			else firstRoll!!.pinsKnockedDown + secondRoll!!.pinsKnockedDown
 		}
@@ -57,23 +57,6 @@ class LastFrame: Frame() {
 		else setThirdRoll(pinsKnockedDown)
 	}
 
-	private fun setThirdRoll(pinsKnockedDown: Int) {
-		if (pinsKnockedDown > 10) throw CheatingException()
-		thirdRoll = if (secondRoll is Strike) {
-			if (pinsKnockedDown == 10) Strike()
-			else Roll(pinsKnockedDown)
-		}
-		else if (secondRoll is Spare) {
-			if (pinsKnockedDown == 10) Strike()
-			else Roll(pinsKnockedDown)
-		}
-		else {
-			if (secondRoll!!.pinsKnockedDown + pinsKnockedDown > 10) throw CheatingException()
-			if (secondRoll!!.pinsKnockedDown + pinsKnockedDown == 10) Spare(pinsKnockedDown)
-			else Roll(pinsKnockedDown)
-		}
-		isClosed = true
-	}
 
 	override fun setFirstRoll(pinsKnockedDown: Int) {
 		if (pinsKnockedDown > 10) throw CheatingException()
@@ -94,9 +77,27 @@ class LastFrame: Frame() {
 		}
 	}
 
+	private fun setThirdRoll(pinsKnockedDown: Int) {
+		if (pinsKnockedDown > 10) throw CheatingException()
+		thirdRoll = if (secondRoll is Strike) {
+			if (pinsKnockedDown == 10) Strike()
+			else Roll(pinsKnockedDown)
+		}
+		else if (secondRoll is Spare) {
+			if (pinsKnockedDown == 10) Strike()
+			else Roll(pinsKnockedDown)
+		}
+		else {
+			if (secondRoll!!.pinsKnockedDown + pinsKnockedDown > 10) throw CheatingException()
+			if (secondRoll!!.pinsKnockedDown + pinsKnockedDown == 10) Spare(pinsKnockedDown)
+			else Roll(pinsKnockedDown)
+		}
+		isClosed = true
+	}
+
 	override val selfScore: Int
 		get() {
-			return if (!isClosed) 0
+			return if (!isClosed) {(firstRoll?.pinsKnockedDown?: 0) + (secondRoll?.pinsKnockedDown?: 0)}
 			else if (firstRoll !is Strike && secondRoll !is Spare) firstRoll!!.pinsKnockedDown + secondRoll!!.pinsKnockedDown
 			else firstRoll!!.pinsKnockedDown + secondRoll!!.pinsKnockedDown + thirdRoll!!.pinsKnockedDown
 		}
