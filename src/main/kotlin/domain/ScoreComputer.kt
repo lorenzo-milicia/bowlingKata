@@ -29,7 +29,7 @@ object ScoreComputer {
 	fun computeTotalScore(frames: List<Frame>): Int = computeFramesScore(frames).sumOf { it.score }
 
 	private fun computeSpareFrameScore(referenceFrame: Frame, bonusFrame: Frame): FrameScore {
-		return if (bonusFrame.frameStatus != FrameStatus.EMPTY) FrameScore(referenceFrame.selfScore + bonusFrame.firstRoll!!.pinsKnockedDown, false)
+		return if (bonusFrame.frameStatus != FrameStatus.EMPTY) FrameScore(referenceFrame.selfScore + bonusFrame.firstRoll.pinsKnockedDown, false)
 		else FrameScore(referenceFrame.selfScore, true)
 	}
 
@@ -37,17 +37,17 @@ object ScoreComputer {
 		return when (bonusFrame.frameStatus) {
 			FrameStatus.STRIKE -> FrameScore(20, true)
 			FrameStatus.EMPTY -> FrameScore(10, true)
-			FrameStatus.LAST -> FrameScore(10 + bonusFrame.firstRoll!!.pinsKnockedDown + bonusFrame.secondRoll!!.pinsKnockedDown, false)
-			FrameStatus.LAST_ONLY_FIRST -> FrameScore(10 + bonusFrame.firstRoll!!.pinsKnockedDown, true)
-			FrameStatus.LAST_FIRST_AND_SECOND -> FrameScore(10 + bonusFrame.firstRoll!!.pinsKnockedDown + bonusFrame.secondRoll!!.pinsKnockedDown, false)
-			FrameStatus.INCOMPLETE -> FrameScore(10 + bonusFrame.firstRoll!!.pinsKnockedDown, true)
+			FrameStatus.LAST -> FrameScore(10 + bonusFrame.firstRoll.pinsKnockedDown + bonusFrame.secondRoll.pinsKnockedDown, false)
+			FrameStatus.LAST_ONLY_FIRST -> FrameScore(10 + bonusFrame.firstRoll.pinsKnockedDown, true)
+			FrameStatus.LAST_FIRST_AND_SECOND -> FrameScore(10 + bonusFrame.firstRoll.pinsKnockedDown + bonusFrame.secondRoll.pinsKnockedDown, false)
+			FrameStatus.INCOMPLETE -> FrameScore(10 + bonusFrame.firstRoll.pinsKnockedDown, true)
 			else -> FrameScore(referenceFrame.selfScore + referenceFrame.selfScore, false)
 		}
 	}
 
 	private fun computeStrikeFrameScore(referenceFrame: Frame, firstBonusFrame: Frame, secondBonusFrame: Frame): FrameScore {
 		if (firstBonusFrame.frameStatus == FrameStatus.STRIKE && secondBonusFrame.frameStatus == FrameStatus.EMPTY) FrameScore(20, true)
-		if (firstBonusFrame.frameStatus == FrameStatus.STRIKE) return FrameScore(referenceFrame.selfScore + firstBonusFrame.selfScore + secondBonusFrame.firstRoll!!.pinsKnockedDown, false)
+		if (firstBonusFrame.frameStatus == FrameStatus.STRIKE) return FrameScore(referenceFrame.selfScore + firstBonusFrame.selfScore + secondBonusFrame.firstRoll.pinsKnockedDown, false)
 		else return FrameScore(referenceFrame.selfScore + firstBonusFrame.selfScore, false)
 	}
 }

@@ -9,3 +9,5 @@ class Spare(
 ): Roll(pinsKnockedDown)
 
 class Strike(): Roll(10)
+
+class EmptyRoll(): Roll(0)

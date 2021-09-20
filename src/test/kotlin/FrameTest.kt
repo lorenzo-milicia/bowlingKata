@@ -1,6 +1,4 @@
-import domain.Frame
-import domain.Spare
-import domain.Strike
+import domain.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertFalse
@@ -17,8 +15,8 @@ class FrameTest {
 		frame.roll(5)
 		frame.roll(4)
 
-		assertNotNull(frame.firstRoll)
-		assertNotNull(frame.secondRoll)
+		assertFalse(frame.firstRoll is EmptyRoll)
+		assertFalse(frame.secondRoll is EmptyRoll)
 		assertTrue(frame.isClosed)
 	}
 
@@ -28,8 +26,8 @@ class FrameTest {
 
 		frame.roll(8)
 
-		assertNotNull(frame.firstRoll)
-		assertNull(frame.secondRoll)
+		assertFalse(frame.firstRoll is EmptyRoll)
+		assertTrue(frame.secondRoll is EmptyRoll)
 		assertFalse(frame.isClosed)
 	}
 
@@ -40,7 +38,7 @@ class FrameTest {
 		frame.roll(10)
 
 		assertTrue(frame.firstRoll is Strike)
-		assertTrue(frame.secondRoll == null)
+		assertTrue(frame.secondRoll is EmptyRoll)
 		assertTrue(frame.isClosed)
 	}
 
@@ -51,7 +49,7 @@ class FrameTest {
 		frame.roll(5)
 		frame.roll(5)
 
-		assertNotNull(frame.firstRoll)
+		assertFalse(frame.firstRoll is EmptyRoll)
 		assertTrue(frame.secondRoll is Spare)
 		assertTrue(frame.isClosed)
 
@@ -61,7 +59,7 @@ class FrameTest {
 	internal fun `cheating test`() {
 		val frame = Frame()
 
-		assertThrows<Exception>{frame.roll(12)}
+		assertThrows<CheatingException>{frame.roll(12)}
 	}
 
 	@Test
@@ -70,6 +68,6 @@ class FrameTest {
 
 		frame.roll(4)
 
-		assertThrows<java.lang.Exception> { frame.roll(10) }
+		assertThrows<CheatingException> { frame.roll(10) }
 	}
 }
