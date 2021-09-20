@@ -7,7 +7,9 @@ object ScoreComputer {
 			when (frame.frameStatus) {
 				FrameStatus.EMPTY -> FrameScore(0,true)
 				FrameStatus.INCOMPLETE -> FrameScore(frame.selfScore, true)
-				FrameStatus.LAST -> if (!frame.isClosed) FrameScore(frame.selfScore, true) else FrameScore(frame.selfScore, false)
+				FrameStatus.LAST_ONLY_FIRST -> FrameScore(frame.selfScore, true)
+				FrameStatus.LAST_FIRST_AND_SECOND -> FrameScore(frame.selfScore, true)
+				FrameStatus.LAST -> FrameScore(frame.selfScore, false)
 				FrameStatus.REGULAR -> FrameScore(frame.selfScore, false)
 				FrameStatus.SPARE -> {
 					if (index == frames.lastIndex) FrameScore(10, true)
@@ -31,11 +33,14 @@ object ScoreComputer {
 		else FrameScore(referenceFrame.selfScore, true)
 	}
 
-	private fun computeStrikeFrameScore(referenceFrame: Frame, firstBonusFrame: Frame): FrameScore {
-		return when (firstBonusFrame.frameStatus) {
+	private fun computeStrikeFrameScore(referenceFrame: Frame, bonusFrame: Frame): FrameScore {
+		return when (bonusFrame.frameStatus) {
 			FrameStatus.STRIKE -> FrameScore(20, true)
 			FrameStatus.EMPTY -> FrameScore(10, true)
-			FrameStatus.INCOMPLETE -> FrameScore(10 + firstBonusFrame.firstRoll!!.pinsKnockedDown, true)
+			FrameStatus.LAST -> FrameScore(10 + bonusFrame.firstRoll!!.pinsKnockedDown + bonusFrame.secondRoll!!.pinsKnockedDown, false)
+			FrameStatus.LAST_ONLY_FIRST -> FrameScore(10 + bonusFrame.firstRoll!!.pinsKnockedDown, true)
+			FrameStatus.LAST_FIRST_AND_SECOND -> FrameScore(10 + bonusFrame.firstRoll!!.pinsKnockedDown + bonusFrame.secondRoll!!.pinsKnockedDown, false)
+			FrameStatus.INCOMPLETE -> FrameScore(10 + bonusFrame.firstRoll!!.pinsKnockedDown, true)
 			else -> FrameScore(referenceFrame.selfScore + referenceFrame.selfScore, false)
 		}
 	}

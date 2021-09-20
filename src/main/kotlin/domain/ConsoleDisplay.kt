@@ -14,7 +14,7 @@ class ConsoleDisplay: IDisplay {
 
 	override fun displayTotalScore(score: Int) {
 		println("-----")
-		println("${score}")
+		println("$score")
 		println("-----")
 	}
 

@@ -5,6 +5,8 @@ enum class FrameStatus {
 	STRIKE,
 	SPARE,
 	LAST,
+	LAST_ONLY_FIRST,
+	LAST_FIRST_AND_SECOND,
 	INCOMPLETE,
 	EMPTY
 }
