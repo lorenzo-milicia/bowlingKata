@@ -1,3 +1,4 @@
+import domain.FrameScore
 import domain.LastFrame
 import domain.ScoreComputer
 import domain.Scoreboard
@@ -68,7 +69,13 @@ class ScoreboardTest {
 		scoreboard.roll(0)
 		scoreboard.roll(10)
 
-		val scores = listOf(13, 5, 9, 6, 4, null)
+		val scores = listOf(
+			FrameScore(13, false),
+			FrameScore(5, false),
+			FrameScore(9, false),
+			FrameScore(6, false),
+			FrameScore(4, false),
+			FrameScore(10, true))
 		assertEquals(scores, scoreboard.frameScores())
 	}
 }
