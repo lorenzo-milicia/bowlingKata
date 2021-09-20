@@ -4,7 +4,9 @@ open class Frame {
 
 	var firstRoll: Roll? = null
 	var secondRoll: Roll? = null
-	var isClosed: Boolean = false
+
+	open val isClosed: Boolean
+		get() = firstRoll is Strike || secondRoll != null
 
 	open val frameStatus: FrameStatus
 		get() {
@@ -23,7 +25,7 @@ open class Frame {
 
 	open fun setFirstRoll(pinsKnockedDown: Int) {
 		if (pinsKnockedDown > 10) throw CheatingException()
-		firstRoll = if (pinsKnockedDown == 10) Strike().also { isClosed = true }
+		firstRoll = if (pinsKnockedDown == 10) Strike()
 		else Roll(pinsKnockedDown)
 	}
 
@@ -31,7 +33,6 @@ open class Frame {
 		if (firstRoll!!.pinsKnockedDown + pinsKnockedDown > 10) throw CheatingException()
 		secondRoll = if (firstRoll!!.pinsKnockedDown + pinsKnockedDown == 10) Spare(pinsKnockedDown)
 		else Roll(pinsKnockedDown)
-		isClosed = true
 	}
 
 	open val selfScore: Int
@@ -45,6 +46,12 @@ open class Frame {
 class LastFrame: Frame() {
 
 	var thirdRoll: Roll? = null
+
+	override val isClosed: Boolean
+		get() {
+			return if ((firstRoll is Strike || secondRoll is Spare) && thirdRoll != null) true
+			else firstRoll !is Strike && secondRoll !is Spare && secondRoll != null
+		}
 
 	override val frameStatus: FrameStatus
 		get() =
@@ -77,7 +84,7 @@ class LastFrame: Frame() {
 		else {
 			if (firstRoll!!.pinsKnockedDown + pinsKnockedDown > 10) throw CheatingException()
 			if (firstRoll!!.pinsKnockedDown + pinsKnockedDown == 10) secondRoll = Spare(pinsKnockedDown)
-			else secondRoll = Roll(pinsKnockedDown).also { isClosed = true }
+			else secondRoll = Roll(pinsKnockedDown)
 		}
 	}
 
@@ -92,7 +99,6 @@ class LastFrame: Frame() {
 			if (secondRoll!!.pinsKnockedDown + pinsKnockedDown == 10) Spare(pinsKnockedDown)
 			else Roll(pinsKnockedDown)
 		}
-		isClosed = true
 	}
 
 	override val selfScore: Int

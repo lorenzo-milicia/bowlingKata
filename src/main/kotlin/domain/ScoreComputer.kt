@@ -5,10 +5,10 @@ object ScoreComputer {
 	fun computeFramesScore(frames: List<Frame>): List<FrameScore> {
 		return frames.mapIndexed { index, frame ->
 			when (frame.frameStatus) {
-				FrameStatus.EMPTY -> FrameScore(0,true)
-				FrameStatus.INCOMPLETE -> FrameScore(frame.selfScore, true)
-				FrameStatus.LAST_ONLY_FIRST -> FrameScore(frame.selfScore, true)
-				FrameStatus.LAST_FIRST_AND_SECOND -> FrameScore(frame.selfScore, true)
+				FrameStatus.EMPTY -> FrameScore(0,true) //
+				FrameStatus.INCOMPLETE -> FrameScore(frame.selfScore, true) //
+				FrameStatus.LAST_ONLY_FIRST -> FrameScore(frame.selfScore, true) //
+				FrameStatus.LAST_FIRST_AND_SECOND -> FrameScore(frame.selfScore, true) //
 				FrameStatus.LAST -> FrameScore(frame.selfScore, false)
 				FrameStatus.REGULAR -> FrameScore(frame.selfScore, false)
 				FrameStatus.SPARE -> {
