@@ -12,13 +12,9 @@ class Scoreboard {
 		}
 	}
 
-	fun isGameOver() = frames.last() is LastFrame && frames.last().isClosed
+	fun isGameOver() = frames.last().let { it is LastFrame || it.isClosed }
 
-	fun frameScores(): List<FrameScore> {
-		return ScoreComputer.computeFramesScore(frames)
-	}
+	fun frameScores(): List<FrameScore> = ScoreComputer.computeFramesScore(frames)
 
-	fun totalScore(): Int {
-		return ScoreComputer.computeTotalScore(frames)
-	}
+	fun totalScore(): Int = ScoreComputer.computeTotalScore(frames)
 }

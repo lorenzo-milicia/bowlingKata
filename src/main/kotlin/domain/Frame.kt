@@ -6,7 +6,7 @@ open class Frame {
 	var secondRoll: Roll = EmptyRoll()
 
 	open val isClosed: Boolean
-		get() = firstRoll is Strike || secondRoll !is EmptyRoll
+		get() = (secondRoll !is EmptyRoll || firstRoll is Strike)
 
 	open val frameStatus: FrameStatus
 		get() {
@@ -18,7 +18,6 @@ open class Frame {
 		}
 
 	open fun roll(pinsKnockedDown: Int) {
-		if (isClosed) return
 		if (firstRoll is EmptyRoll) setFirstRoll(pinsKnockedDown)
 		else setSecondRoll(pinsKnockedDown)
 	}
